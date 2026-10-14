@@ -1,0 +1,48 @@
+{
+  "rules": {
+    "riders": {
+      "$rider_id": {
+        // Read policy: authenticated users can read rider status (e.g., fleet dashboard or supervisor)
+        ".read": "auth != null",
+        
+        // Write policy: only authenticated users can write, with schema and range validation
+        ".write": "auth != null",
+        
+        // Schema and data validation rules
+        ".validate": "newData.hasChildren(['riderId', 'helmet', 'alcohol', 'alcoholValue', 'buzzer', 'banned', 'helmetMissingSeconds', 'banRemainingSeconds', 'updatedAt'])",
+        
+        "riderId": {
+          ".validate": "newData.isString() && newData.val() === $rider_id"
+        },
+        "helmet": {
+          ".validate": "newData.isBoolean()"
+        },
+        "alcohol": {
+          ".validate": "newData.isBoolean()"
+        },
+        "alcoholValue": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4095"
+        },
+        "buzzer": {
+          ".validate": "newData.isBoolean()"
+        },
+        "banned": {
+          ".validate": "newData.isBoolean()"
+        },
+        "helmetMissingSeconds": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "banRemainingSeconds": {
+          ".validate": "newData.isNumber() && newData.val() >= 0"
+        },
+        "updatedAt": {
+          // Allow server timestamp (.sv: timestamp) or numeric timestamp
+          ".validate": "newData.isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
