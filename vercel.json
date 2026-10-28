@@ -1,0 +1,5 @@
+{
+  "outputDirectory": "portal",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
